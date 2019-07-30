@@ -1,0 +1,27 @@
+service: aws-challenge
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  profile: ${opt:profile, self:custom.defaultProfile}
+  stage: ${opt:stage, self:custom.defaultStage}
+  region: ${opt:region, self:custom.defaultRegion}
+
+custom:
+  defaultProfile: default
+  defaultStage: dev
+  defaultRegion: ap-northeast-1
+
+functions:
+  lambda:
+    handler: handler.index
+    timeout: 10
+    memorySize: 512
+    description: 'the first question. Fix a lambda that is not working!'
+    reservedConcurrency: 0
+    events:
+      - http:
+          path: /getNextStage/{key+}
+          method: get
+          cors: true
+          private: false
